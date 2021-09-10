@@ -43,7 +43,7 @@ TGT = data.Field(tokenize=tokenize_en, init_token = BOS_WORD,
                  eos_token = EOS_WORD, pad_token=BLANK_WORD)
 
 print("Loading Dataset")
-full = pd.read_csv("my_data.csv")
+full = pd.read_csv("data/full_unique.csv")
 english_lines = list(full["edited_version"])
 spanish_lines = list(full["original_clean"])
 print("### There are {} lines of data ####".format(len(english_lines)))
@@ -63,6 +63,20 @@ MIN_FREQ = 1
 SRC.build_vocab(train.src, min_freq=MIN_FREQ)
 TGT.build_vocab(train.trg, min_freq=MIN_FREQ)
 gc.collect()
+
+print("Loading Dataset")
+full = pd.read_csv("my_data.csv")
+english_lines = list(full["edited_version"])
+spanish_lines = list(full["original_clean"])
+print("### There are {} lines of data ####".format(len(english_lines)))
+
+fields = (["src", SRC], ["trg", TGT])
+examples = [torchtext.legacy.data.Example.fromlist((spanish_lines[i], english_lines[i]), fields ) for i in range(len(english_lines))]
+MAX_LEN = 200
+val = torchtext.legacy.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
+        len(vars(x)['trg']) <= MAX_LEN)
+
+
 
 val_df = pd.DataFrame(list_of_val)
 val_df.to_csv("val_data.csv")
