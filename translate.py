@@ -43,7 +43,7 @@ TGT = data.Field(tokenize=tokenize_en, init_token = BOS_WORD,
                  eos_token = EOS_WORD, pad_token=BLANK_WORD)
 
 print("Loading Dataset")
-full = pd.read_csv(os.path.join("data", "full_unique.csv"))
+full = pd.read_csv("my_data.csv"))
 english_lines = list(full["edited_version"])
 spanish_lines = list(full["original_clean"])
 print("### There are {} lines of data ####".format(len(english_lines)))
