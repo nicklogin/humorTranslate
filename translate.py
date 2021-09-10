@@ -66,9 +66,9 @@ TGT.build_vocab(train.trg, min_freq=MIN_FREQ)
 gc.collect()
 
 print("Loading Dataset")
-full = pd.read_csv("my_data.csv")
-english_lines = list(full["edited_version"])
-spanish_lines = list(full["original_clean"])
+full = pd.read_csv("1000HeadlinesData.csv")
+english_lines = list(full["edited"])
+spanish_lines = list(full["original"])
 print("### There are {} lines of data ####".format(len(english_lines)))
 
 TGT1 = data.Field(tokenize=tokenize_en, init_token = BOS_WORD, 
