@@ -42,6 +42,7 @@ SRC = data.Field(tokenize=tokenize_en, pad_token=BLANK_WORD)
 TGT = data.Field(tokenize=tokenize_en, init_token = BOS_WORD, 
                  eos_token = EOS_WORD, pad_token=BLANK_WORD)
 
+
 print("Loading Dataset")
 full = pd.read_csv("data/full_unique.csv")
 english_lines = list(full["edited_version"])
@@ -70,11 +71,16 @@ english_lines = list(full["edited_version"])
 spanish_lines = list(full["original_clean"])
 print("### There are {} lines of data ####".format(len(english_lines)))
 
-fields = (["src", SRC], ["trg", TGT])
+TGT1 = data.Field(tokenize=tokenize_en, init_token = BOS_WORD, 
+                 eos_token = EOS_WORD, pad_token=BLANK_WORD)
+
+fields = (["src", SRC], ["trg", TGT1])
 examples = [torchtext.legacy.data.Example.fromlist((spanish_lines[i], english_lines[i]), fields ) for i in range(len(english_lines))]
 MAX_LEN = 200
 val = torchtext.legacy.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
         len(vars(x)['trg']) <= MAX_LEN)
+
+TGT1.build_vocab(val.trg, min_freq=MIN_FREQ)
 
 list_of_val = []
 for example in val.examples:
@@ -166,7 +172,7 @@ def eval_all_text(valid_iter, model, n_samples: int = 2):
             new_sample["translated"] = instance
             instance = ""
             for i in range(1, batch.trg.size(0)):
-                sym = TGT.vocab.itos[batch.trg.data[i, sentence_idx]]
+                sym = TGT1.vocab.itos[batch.trg.data[i, sentence_idx]]
                 if sym == "</s>": break
                 instance += sym + " "
             new_sample["edited"] = instance
