@@ -76,6 +76,10 @@ MAX_LEN = 200
 val = torchtext.legacy.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
         len(vars(x)['trg']) <= MAX_LEN)
 
+list_of_val = []
+for example in val.examples:
+    new_dict = {"original": " ".join(example.src), "edited": " ".join(example.trg)}
+    list_of_val.append(new_dict)
 
 
 val_df = pd.DataFrame(list_of_val)
@@ -247,6 +251,10 @@ def evaluate(args: argparse.Namespace):
     valid_iter = DataIterator(val, batch_size=BATCH_SIZE, device=device,
                             repeat=False, sort_key=lambda x: (len(x.src), len(x.trg)),
                             batch_size_fn=batch_size_fn, train=False)
+    
+    for batch in valid.iter:
+        for sent in batch:
+            print(sent.src)
 
     model_opt = torch.optim.Adam(model.parameters(), lr=5e-4)
     samples = eval_all_text(valid_iter, model, n_samples=len(val))
