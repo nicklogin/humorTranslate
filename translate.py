@@ -49,9 +49,9 @@ spanish_lines = list(full["original_clean"])
 print("### There are {} lines of data ####".format(len(english_lines)))
 
 fields = (["src", SRC], ["trg", TGT])
-examples = [torchtext.data.Example.fromlist((spanish_lines[i], english_lines[i]), fields ) for i in range(len(english_lines))]
+examples = [torchtext.legacy.data.Example.fromlist((spanish_lines[i], english_lines[i]), fields ) for i in range(len(english_lines))]
 MAX_LEN = 200
-train, val = torchtext.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
+train, val = torchtext.legacy.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
         len(vars(x)['trg']) <= MAX_LEN).split()
 
 list_of_val = []
@@ -159,8 +159,8 @@ def eval_all_text(valid_iter, model, n_samples: int = 2):
 
 
 def add_examples(text: typing.List[str], MAX_LEN=200, BATCH_SIZE=1000):
-    examples = [torchtext.data.Example.fromlist((text[i], ""), fields ) for i in range(len(text))]
-    data = torchtext.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
+    examples = [torchtext.legacy.data.Example.fromlist((text[i], ""), fields ) for i in range(len(text))]
+    data = torchtext.legacy.data.Dataset(examples, fields=fields, filter_pred=lambda x: len(vars(x)['src']) <= MAX_LEN and 
         len(vars(x)['trg']) <= MAX_LEN)
     new_iter = DataIterator(data, batch_size=BATCH_SIZE, device=device,
                             repeat=False, sort_key=lambda x: (len(x.src), len(x.trg)),
