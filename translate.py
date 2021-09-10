@@ -254,7 +254,7 @@ def evaluate(args: argparse.Namespace):
     
     for batch in valid_iter:
         for sent in batch:
-            print(sent.src)
+            print(sent)
 
     model_opt = torch.optim.Adam(model.parameters(), lr=5e-4)
     samples = eval_all_text(valid_iter, model, n_samples=len(val))
