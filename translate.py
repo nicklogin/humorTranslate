@@ -249,7 +249,7 @@ def evaluate(args: argparse.Namespace):
     criterion.cuda()
     BATCH_SIZE = 1000
     for sent in val:
-        print(sent)
+        print(sent.src)
     valid_iter = DataIterator(val, batch_size=BATCH_SIZE, device=device,
                             repeat=False, sort_key=lambda x: (len(x.src), len(x.trg)),
                             batch_size_fn=batch_size_fn, train=False)
