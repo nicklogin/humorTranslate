@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn
 import math
 import random
-from torchtext import data, datasets
+from torchtext.legacy import data, datasets
 seaborn.set_context(context="talk")
 
 random.seed(42)
