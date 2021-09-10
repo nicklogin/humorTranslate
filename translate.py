@@ -252,7 +252,7 @@ def evaluate(args: argparse.Namespace):
                             repeat=False, sort_key=lambda x: (len(x.src), len(x.trg)),
                             batch_size_fn=batch_size_fn, train=False)
     
-    for batch in valid.iter:
+    for batch in valid_iter:
         for sent in batch:
             print(sent.src)
 
